@@ -1,0 +1,131 @@
+This file is a merged representation of the entire codebase, combined into a single document by Repomix.
+
+<file_summary>
+This section contains a summary of this file.
+
+<purpose>
+This file contains a packed representation of the entire repository's contents.
+It is designed to be easily consumable by AI systems for analysis, code review,
+or other automated processes.
+</purpose>
+
+<file_format>
+The content is organized as follows:
+1. This summary section
+2. Repository information
+3. Directory structure
+4. Repository files (if enabled)
+5. Multiple file entries, each consisting of:
+  - File path as an attribute
+  - Full contents of the file
+</file_format>
+
+<usage_guidelines>
+- This file should be treated as read-only. Any changes should be made to the
+  original repository files, not this packed version.
+- When processing this file, use the file path to distinguish
+  between different files in the repository.
+- Be aware that this file may contain sensitive information. Handle it with
+  the same level of security as you would the original repository.
+</usage_guidelines>
+
+<notes>
+- Some files may have been excluded based on .gitignore rules and Repomix's configuration
+- Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
+- Files matching patterns in .gitignore are excluded
+- Files matching default ignore patterns are excluded
+- Files are sorted by Git change count (files with more changes are at the bottom)
+</notes>
+
+</file_summary>
+
+<directory_structure>
+src/
+  main/
+    Main.java
+build.gradle
+run.sh
+settings.gradle
+</directory_structure>
+
+<files>
+This section contains the contents of the repository's files.
+
+<file path="src/main/Main.java">
+package main;
+
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("Ola Gustavo");
+    }
+}
+</file>
+
+<file path="build.gradle">
+plugins {
+    id 'application'
+    id 'checkstyle'
+    id 'jacoco'
+    id 'org.gradle.toolchains.foojay-resolver-convention' version '0.8.0' // Auto-provisionamento de JDKs
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+        vendor = JvmVendorSpec.ADOPTIUM // Ou Adoptium/BellSoft/Azul conforme desejado
+    }
+}
+
+application {
+    mainClass = 'main.Main'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Testes modernos
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
+}
+
+test {
+    useJUnitPlatform()
+    finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.required = true
+        html.required = true
+    }
+}
+
+checkstyle {
+    toolVersion = "10.12.4"
+    configFile = file('checkstyle.xml')
+}
+</file>
+
+<file path="run.sh">
+#!/usr/bin/env bash
+set -e
+
+echo "🔍 Garantindo que o Gradle Wrapper está executável..."
+chmod +x ./gradlew
+
+echo "🔧 Baixando toolchain e dependências..."
+./gradlew --no-daemon clean build
+
+echo "✅ Build e testes concluídos!"
+
+echo "🚀 Executando aplicação:"
+./gradlew --no-daemon run
+</file>
+
+<file path="settings.gradle">
+rootProject.name = 'template-java'
+</file>
+
+</files>
